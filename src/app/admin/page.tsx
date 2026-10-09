@@ -11,6 +11,9 @@ import { formatDate, friendlyError, orderCode, rupiah, STATUS } from "@/lib/form
 import { supabase } from "@/lib/supabase";
 import type { Order, OrderStatus, Product } from "@/lib/types";
 
+/** Customer unik = kombinasi nama + No. WhatsApp (checkout tanpa akun). */
+const customerKey = (o: Order) => `${o.customer_name.trim().toLowerCase()}|${o.phone}`;
+
 const FILTERS: (OrderStatus | "all")[] = ["all", "pending", "processing", "completed", "cancelled"];
 
 function Section({ id, title, hint, children }: { id: string; title: string; hint?: string; children: React.ReactNode }) {
@@ -58,15 +61,16 @@ function Dashboard() {
 
   const stats = useMemo(() => {
     const revenue = orders.filter((o) => o.status === "completed").reduce((s, o) => s + o.total, 0);
-    const customers = new Set(orders.map((o) => o.phone)).size;
+    const customers = new Set(orders.map(customerKey)).size;
     return { revenue, orders: orders.length, customers };
   }, [orders]);
 
   const customers = useMemo(() => {
     const map = new Map<string, { name: string; phone: string; email: string; count: number; last: string; spent: number }>();
     for (const o of orders) {
-      const c = map.get(o.phone);
-      if (!c) map.set(o.phone, { name: o.customer_name, phone: o.phone, email: o.email, count: 1, last: o.created_at, spent: o.total });
+      const k = customerKey(o);
+      const c = map.get(k);
+      if (!c) map.set(k, { name: o.customer_name, phone: o.phone, email: o.email, count: 1, last: o.created_at, spent: o.total });
       else {
         c.count++;
         c.spent += o.total;
@@ -237,7 +241,7 @@ function Dashboard() {
               </thead>
               <tbody>
                 {customers.map((c, i) => (
-                  <tr key={c.phone} className="border-t border-white/10 text-sm lg:text-base">
+                  <tr key={c.phone + c.name} className="border-t border-white/10 text-sm lg:text-base">
                     <td className="py-4">{i + 1}.</td>
                     <td>{c.name}</td>
                     <td>
@@ -254,7 +258,7 @@ function Dashboard() {
             </table>
             <ul className="space-y-3 md:hidden">
               {customers.map((c) => (
-                <li key={c.phone} className="rounded-xl border border-white/20 bg-panel p-4">
+                <li key={c.phone + c.name} className="rounded-xl border border-white/20 bg-panel p-4">
                   <div className="flex justify-between">
                     <span>{c.name}</span>
                     <span className="text-sm text-muted">{c.count}× order</span>

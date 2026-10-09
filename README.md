@@ -202,7 +202,7 @@ admin_users ── auth.users
 - Stok dihitung per produk (semua ukuran digabung) dan **berkurang otomatis** saat order dibuat. Jika stok tidak cukup, checkout ditolak.
 - Harga di `order_items` disimpan sebagai snapshot, sehingga perubahan harga produk tidak mengubah order lama.
 - **Revenue** di dashboard = total order berstatus *Selesai*.
-- **Customer** = pembeli unik berdasarkan No. WhatsApp (checkout tanpa akun / guest).
+- **Customer** = pembeli unik berdasarkan kombinasi **nama + No. WhatsApp** (checkout tanpa akun / guest).
 
 ---
 
