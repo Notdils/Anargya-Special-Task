@@ -1,0 +1,16 @@
+// Font di-host sendiri via @fontsource (tidak butuh koneksi ke Google Fonts saat build)
+import "@fontsource/inter/800.css";
+import "@fontsource/inter/900.css";
+import "@fontsource/outfit/700.css";
+import "@fontsource/rethink-sans/400.css";
+import "@fontsource/rethink-sans/500.css";
+import "@fontsource/roboto-mono/400.css";
+import "@fontsource/roboto-mono/700.css";
+import "@fontsource/ibm-plex-mono/500.css";
+import "@fontsource/geist-mono/500.css";
+import "@fontsource/anonymous-pro/400.css";
+import "@fontsource/crimson-text/600.css";
+import "@fontsource/source-serif-4/400.css";
+import "@fontsource/gowun-batang/400.css";
+import "@fontsource/radio-canada-big/400.css";
+import "@fontsource/radio-canada-big/500.css";
