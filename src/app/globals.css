@@ -49,3 +49,27 @@ input[type=number] { -moz-appearance: textfield; }
 @keyframes heroZoom { from { transform: scale(1.12); } to { transform: scale(1); } }
 @keyframes pop { 0% { transform: scale(.4); opacity: 0; } 70% { transform: scale(1.1); opacity: 1; } 100% { transform: scale(1); } }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* ===== Energize Talk: carousel keping cermin ===== */
+/* mobile: area 390×360 (frame Figma mobile) */
+.shard-stage { aspect-ratio: 390 / 360; }
+.shard-slot {
+  position: absolute;
+  transition: left .8s ease, top .8s ease, width .8s ease, opacity .8s ease, filter .8s ease;
+}
+.shard-slot--front { left: 15.4%; top: 2.8%; width: 69.2%; z-index: 2; cursor: default; }
+.shard-slot--tr { left: 73.3%; top: 0; width: 24.6%; opacity: .42; filter: blur(1.5px); z-index: 1; }
+.shard-slot--bl { left: 2%; top: 69%; width: 24.6%; opacity: .42; filter: blur(1.5px); z-index: 1; }
+.shard-slot:not(.shard-slot--front):hover { opacity: .7; filter: none; }
+@media (min-width: 768px) {
+  /* tablet & desktop: area 620×600 (frame Figma desktop) */
+  .shard-stage { aspect-ratio: 620 / 600; }
+  .shard-slot--front { left: 22.6%; top: 5%; width: 59.7%; }
+  .shard-slot--tr { left: 67.7%; top: 0; width: 30.6%; }
+  .shard-slot--bl { left: 1.6%; top: 55%; width: 32.3%; }
+  .shard-caption { margin-left: 22.6%; width: 59.7%; }
+}
+@keyframes shardProgress { from { width: 0; } to { width: 100%; } }
+@media (prefers-reduced-motion: reduce) {
+  .shard-slot { transition: opacity .3s ease !important; }
+}

@@ -1,10 +1,13 @@
 // Font di-host sendiri via @fontsource (tidak butuh koneksi ke Google Fonts saat build)
 import "@fontsource/inter/800.css";
 import "@fontsource/inter/900.css";
+import "@fontsource/inter/900-italic.css";
+import "@fontsource/outfit/600.css";
 import "@fontsource/outfit/700.css";
 import "@fontsource/rethink-sans/400.css";
 import "@fontsource/rethink-sans/500.css";
 import "@fontsource/roboto-mono/400.css";
+import "@fontsource/roboto-mono/500.css";
 import "@fontsource/roboto-mono/700.css";
 import "@fontsource/ibm-plex-mono/500.css";
 import "@fontsource/geist-mono/500.css";

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Logo from "./Logo";
 import { Facebook, Instagram, Tiktok } from "./Icons";
 
@@ -21,13 +22,21 @@ export default function Footer() {
             </a>
           </div>
         </div>
-        <address className="font-gowun text-base not-italic tracking-[-0.03em] text-[#fcfaf6] md:text-[20px] lg:text-[26px]">
-          Jl. Teknik Sipil No. 2, Keputih, Kec. Sukolilo, Kota Surabaya, Jawa Timur 60111
-          <br />
-          <a href="mailto:anargya.its@gmail.com" className="text-brand hover:underline">
-            anargya.its@gmail.com
-          </a>
-        </address>
+        <div>
+          <address className="font-gowun text-base not-italic tracking-[-0.03em] text-[#fcfaf6] md:text-[20px] lg:text-[26px]">
+            Jl. Teknik Sipil No. 2, Keputih, Kec. Sukolilo, Kota Surabaya, Jawa Timur 60111
+            <br />
+            <a href="mailto:anargya.its@gmail.com" className="text-brand hover:underline">
+              anargya.its@gmail.com
+            </a>
+          </address>
+          <Link
+            href="/energize-talk"
+            className="mt-3 inline-block font-gowun text-base tracking-[-0.03em] text-brand hover:underline md:text-[20px] lg:text-[26px]"
+          >
+            Energize Talk 2026 →
+          </Link>
+        </div>
       </div>
       <Logo className="mx-auto mt-10 w-[62%] max-w-[1240px] md:mt-14 md:w-full" />
     </footer>

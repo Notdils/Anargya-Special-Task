@@ -3,6 +3,10 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Logo from "@/components/Logo";
 import Reveal from "@/components/Reveal";
+import EnergizePopup from "@/components/EnergizePopup";
+import HeroCarousel from "@/components/HeroCarousel";
+import MirrorImage from "@/components/MirrorImage";
+import { SPEAKERS } from "@/lib/energize";
 
 const SPECS = [
   { title: "Track", body: "Measured at 10 Km/ Kilowatt, demonstrating efficient fuel to distance ratio" },
@@ -33,24 +37,67 @@ export default function Home() {
     <>
       <Navbar />
       <main className="overflow-x-hidden">
-        {/* ---------------- HERO ---------------- */}
-        <section className="relative flex min-h-[600px] items-center justify-center md:min-h-[800px] lg:min-h-[976px]">
-          <Texture />
-          <div
-            aria-hidden
-            className="absolute inset-0 animate-[heroZoom_18s_ease-out_forwards] bg-cover bg-center opacity-20"
-            style={{ backgroundImage: "url(/images/hero.jpg)" }}
-          />
-          <div className="relative flex flex-col items-center gap-8 px-4 text-center md:gap-10">
-            <Logo className="w-[260px] md:w-[420px] lg:w-[529px] animate-[fadeUp_.9s_ease-out_both]" />
-            <Link
-              href="#about"
-              className="animate-[fadeUp_.9s_.25s_ease-out_both] rounded-xl bg-brand px-5 py-2 font-robomono text-2xl font-bold tracking-[-0.03em] text-black shadow-[0_0_0_0_rgba(41,217,112,.6)] transition hover:-translate-y-0.5 hover:shadow-[0_0_30px_4px_rgba(41,217,112,.45)] md:text-[40px] md:py-3"
-            >
-              ABOUT US
-            </Link>
-          </div>
-        </section>
+        {/* ---------------- HERO (carousel: 1 Energize Talk, 2 Anargya) ---------------- */}
+        <HeroCarousel
+          labels={["Energize Talk 2026", "Anargya ITS Formula EV Team"]}
+          slides={[
+            <div key="energize" className="relative flex h-full items-center">
+              <Texture />
+              <div
+                aria-hidden
+                className="absolute inset-0 bg-cover bg-center opacity-[.08]"
+                style={{ backgroundImage: "url(/images/hero.jpg)" }}
+              />
+              <div className="relative mx-auto flex w-full max-w-[1280px] items-center gap-6 px-4 md:px-10 lg:pl-[120px] lg:pr-20">
+                <div className="flex min-w-0 flex-1 flex-col gap-[18px] md:gap-6">
+                  <p className="font-robomono text-xs font-medium tracking-[0.12em] text-brand md:text-[13px] lg:text-base">
+                    NEW EVENT · REGISTRATION OPEN
+                  </p>
+                  <h2 className="font-inter font-extrabold leading-none tracking-[-0.03em]">
+                    <span className="block text-[40px] md:text-[44px] lg:text-[72px]">ENERGIZE TALK 2026</span>
+                    <span className="block font-black italic text-brand text-[48px] md:text-[52px] lg:text-[84px]">Watt&apos;s Up!</span>
+                  </h2>
+                  <p className="font-radio text-[19px] leading-tight tracking-[-0.02em] md:text-xl lg:text-[28px]">
+                    Sustain the Future: Youth as Agents of Change
+                  </p>
+                  <p className="font-robomono text-sm font-medium md:text-[15px] lg:text-lg">
+                    14 June 2026 <span className="text-brand">/</span> Zoom <span className="text-brand">/</span> E-Certificate
+                  </p>
+                  <Link
+                    href="/energize-talk"
+                    className="w-full rounded-[10px] border-2 border-brand bg-brand px-5 py-2.5 text-center font-robomono text-xl font-bold tracking-[-0.03em] text-black transition hover:-translate-y-0.5 md:w-fit lg:text-[26px]"
+                  >
+                    LEARN MORE
+                  </Link>
+                </div>
+                <div aria-hidden className="shard-stage relative hidden w-[320px] shrink-0 md:block lg:w-[600px]">
+                  {SPEAKERS.map((s, i) => (
+                    <div key={s.name} className={`shard-slot shard-slot--${["front", "tr", "bl"][i]}`}>
+                      <MirrorImage id={`home-${i}`} src={s.src} alt="" shape={s.shape} className="h-auto w-full" />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>,
+            <div key="anargya" className="relative flex h-full items-center justify-center">
+              <Texture />
+              <div
+                aria-hidden
+                className="absolute inset-0 animate-[heroZoom_18s_ease-out_forwards] bg-cover bg-center opacity-20"
+                style={{ backgroundImage: "url(/images/hero.jpg)" }}
+              />
+              <div className="relative flex flex-col items-center gap-8 px-4 text-center md:gap-10">
+                <Logo className="w-[260px] md:w-[420px] lg:w-[529px]" />
+                <Link
+                  href="#about"
+                  className="rounded-xl bg-brand px-5 py-2 font-robomono text-2xl font-bold tracking-[-0.03em] text-black shadow-[0_0_0_0_rgba(41,217,112,.6)] transition hover:-translate-y-0.5 hover:shadow-[0_0_30px_4px_rgba(41,217,112,.45)] md:text-[40px] md:py-3"
+                >
+                  ABOUT US
+                </Link>
+              </div>
+            </div>,
+          ]}
+        />
 
         {/* ---------------- ABOUT ---------------- */}
         <section id="about" className="relative scroll-mt-24 px-4 py-20 md:px-10 md:py-28 lg:py-32">
@@ -165,6 +212,7 @@ export default function Home() {
         </section>
       </main>
       <Footer />
+      <EnergizePopup />
     </>
   );
 }

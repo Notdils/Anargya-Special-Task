@@ -32,8 +32,8 @@ Special Task Web Design & Development — Anargya 9th Gen (target: **LOW + MED**
 ### Company Profile (LOW)
 | Halaman | Isi |
 |---|---|
-| `/` Home | Hero, **About Us** (EV Research Team), **Details** (Mark 6.0 + spesifikasi), **Achievements** (Our Past Circuits), CTA (Merch & Sponsor via email), Footer/Contact |
-| Navbar | Sticky, link anchor ke tiap section + Merch + ikon keranjang (badge jumlah item). Di mobile berubah menjadi **hamburger menu** dengan animasi |
+| `/` Home | **Hero carousel** (slide 1: Energize Talk + tombol *Learn More*, slide 2: logo Anargya; bisa digeser horizontal/swipe, autoplay tiap 4 detik tetap jalan saat hover, pilih lewat dot), **About Us** (EV Research Team), **Details** (Mark 6.0 + spesifikasi), **Achievements** (Our Past Circuits), CTA (Merch & Sponsor via email), Footer/Contact |
+| Navbar | Sticky, link anchor ke tiap section + dropdown **Programs** (Merch, Energize Talk) + ikon keranjang (badge jumlah item). Di mobile berubah menjadi **hamburger menu** dengan animasi |
 | Interaksi | Animasi *reveal on scroll*, hover zoom gambar, smooth scroll, menghormati `prefers-reduced-motion` |
 | Responsif | 3 breakpoint sesuai Figma: Desktop (≥1024px), Tablet (≥768px), Mobile (<768px) |
 
@@ -52,6 +52,15 @@ Special Task Web Design & Development — Anargya 9th Gen (target: **LOW + MED**
 | `/admin` | Statistik (Revenue dari order *Selesai*, jumlah Order, jumlah Customer) · **Stock**: tambah / edit / hapus produk + upload gambar · **Order list**: filter status & pencarian, klik untuk detail · **Customer list** |
 | `/admin/orders/[id]` | Detail order: data pembeli, tombol WhatsApp, rincian item, **ubah status** (Pending → Diproses → Selesai / Dibatalkan) |
 | Keamanan | Row Level Security: publik hanya bisa *membaca produk* dan *membuat order lewat RPC*. Data order hanya bisa dibaca/diubah oleh user yang terdaftar di tabel `admin_users` |
+
+### Event: Energize Talk 2026 (proof of concept)
+| Bagian | Isi |
+|---|---|
+| `/energize-talk` | Halaman event: hero, About, **Meet the Experts**, Benefits, Save the Date, CTA. Form registrasi menyusul di fase berikutnya (tombol *Register Now* sementara mengarah ke detail event) |
+| Carousel keping cermin | Foto 3 pembicara berbentuk keping cermin (SVG `clipPath`). Posisi bertukar tiap 4 detik: cermin di belakang maju ke depan, cermin depan mundur. Pause saat hover, tombol ‹ ›, swipe. Disembunyikan di mobile agar info registrasi langsung terlihat |
+| Countdown | Hitung mundur ke batas pendaftaran (konstanta `REG_CLOSES` di `src/app/energize-talk/page.tsx`). Setelah lewat, tampil "Registration Closed" |
+| Akses | Slide pertama hero Home, dropdown **Programs** di navbar, link di footer semua halaman, dan pop-up pengumuman di Home khusus mobile (tidak muncul lagi setelah ditutup, disimpan di `localStorage`) |
+| Foto pembicara | Simpan sebagai `public/images/energize/kemas.webp`, `arkastra.webp`, `hosta.webp` (data di `src/lib/energize.ts`). Selama file belum ada, keping tampil sebagai kaca hijau |
 
 ---
 
@@ -175,9 +184,10 @@ select id from auth.users where email = 'email-admin-baru@contoh.com';
 │   │   ├── admin/login/page.tsx      # Login admin
 │   │   ├── admin/page.tsx            # Dashboard admin
 │   │   ├── admin/orders/[id]/page.tsx# Detail order
+│   │   ├── energize-talk/page.tsx    # Halaman event Energize Talk
 │   │   ├── layout.tsx, fonts.ts, globals.css
-│   ├── components/   # Navbar, Footer, AdminShell, ProductModal, Reveal, Icons, dll.
-│   └── lib/          # supabase client, cart (localStorage), format Rupiah/tanggal, hooks, types
+│   ├── components/   # Navbar, Footer, AdminShell, ProductModal, Reveal, Icons, HeroCarousel, ShardCarousel, MirrorImage, Countdown, EnergizePopup, dll.
+│   └── lib/          # supabase client, cart (localStorage), format Rupiah/tanggal, hooks, types, energize (data pembicara)
 ├── .env.example
 └── package.json
 ```
@@ -224,5 +234,7 @@ admin_users ── auth.users
 | Login admin: *"Akun ini tidak memiliki akses admin"* | User belum terdaftar di `admin_users`. Jalankan query di bagian 6 |
 | Login admin: *"Email atau password salah"* | Pastikan user dibuat dengan *Auto Confirm User* |
 | Project Supabase *paused* | Project free tier dijeda setelah 7 hari tidak aktif. Buka dashboard Supabase lalu klik **Restore project** |
+| `'next' is not recognized as an internal or external command` | `npm install` belum selesai atau gagal, sehingga folder `node_modules` tidak lengkap. Jalankan ulang `npm install` dan pastikan selesai tanpa `npm error` |
+| `ENOSPC: no space left on device` saat `npm install` | Ruang disk penuh. Kosongkan ruang (minimal ±1 GB), misalnya dengan `npm cache clean --force`, hapus folder `node_modules` yang setengah jadi, lalu ulangi `npm install` |
 | Port 3000 sudah dipakai | `npm run dev -- -p 3001` |
 | Error saat `npm install` | Pastikan Node ≥ 18.18, hapus folder `node_modules` dan `package-lock.json`, lalu ulangi `npm install` |
