@@ -43,8 +43,8 @@ const BENEFITS: [string, string, React.ReactNode][] = [
 const DETAILS: [string, string, React.ReactNode][] = [
   ["DATE", "Monday, 14 June 2027", IC.cal],
   ["REGISTRATION CLOSES", "14 June 2027 · 17:00 WIB", IC.clock],
-  ["PLATFORM", "Zoom Meeting (link dikirim via email)", IC.video],
-  ["OPEN FOR", "Mahasiswa & umum *", IC.users],
+  ["PLATFORM", "Zoom Meeting (link shared in the LINE group)", IC.video],
+  ["OPEN FOR", "Students & public", IC.users],
 ];
 
 const PARTNERS = ["Anargya ITS", "AIESEC Surabaya", "AnakTeknikIndonesia", "ITS Automotive Team"];
@@ -135,7 +135,7 @@ export default function EnergizeTalkPage() {
             </div>
             <div className="flex flex-col gap-7 md:pt-11">
               <p className="text-[17px] leading-[1.65] text-[#d1d1d1] md:text-[19px]">
-                Welcome to Energize 2027! A collaborative event presented by Anargya ITS EV Team to bring together innovators,
+                Welcome to Energize Talk 2027! A collaborative event presented by Anargya ITS EV Team to bring together innovators,
                 students, and future leaders who are passionate about technology, sustainability, and electric vehicle
                 development. Through this event, participants will gain valuable insights, expand their network, and experience
                 the spirit of innovation that drives the future of mobility. Energize is more than just an event — it is a
@@ -261,7 +261,7 @@ export default function EnergizeTalkPage() {
           <div aria-hidden className="absolute left-1/2 top-1/2 h-[400px] w-[700px] max-w-full -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand/30 blur-[200px]" />
           <Reveal className="relative mx-auto flex max-w-[900px] flex-col items-center gap-6">
             <p className="font-robomono text-[11px] font-medium tracking-[0.16em] text-brand md:text-sm">ARE YOU READY TO BE PART OF THE FUTURE?</p>
-            <h2 className="font-inter text-[40px] font-black leading-[1.05] tracking-[-0.02em] md:text-5xl lg:text-[72px]">Secure Your Seat Now</h2>
+            <h2 className="font-inter text-[40px] font-black leading-[1.05] tracking-[-0.02em] md:text-5xl lg:text-[72px]">Join Us on 14 June</h2>
             <p className="text-base text-white/60 md:text-xl">Join the conversation that drives change. ⚡🌍</p>
             <RegisterButton className="px-10 py-[22px]" />
           </Reveal>
