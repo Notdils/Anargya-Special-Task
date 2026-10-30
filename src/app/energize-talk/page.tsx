@@ -5,15 +5,16 @@ import Reveal from "@/components/Reveal";
 import Countdown from "@/components/Countdown";
 import ShardCarousel from "@/components/ShardCarousel";
 import MirrorImage from "@/components/MirrorImage";
+import EnergizeRegisterForm from "@/components/EnergizeRegisterForm";
 import { SPEAKERS } from "@/lib/energize";
 
 export const metadata: Metadata = {
-  title: "Energize Talk 2026 — Anargya EV ITS Team",
-  description: "Energize Talk 2026: Sustain the Future — Youth as Agents of Change. 14 June 2026 via Zoom.",
+  title: "Energize Talk 2027 — Anargya EV ITS Team",
+  description: "Energize Talk 2027: Sustain the Future — Youth as Agents of Change. 14 June 2027 via Zoom.",
 };
 
 // Batas pendaftaran (proof of concept). Ubah tanggal ini untuk menghidupkan countdown.
-const REG_CLOSES = "2026-06-14T17:00:00+07:00";
+const REG_CLOSES = "2027-06-14T17:00:00+07:00";
 
 const G = "#29D970";
 const S = { stroke: G, strokeWidth: 2 } as const;
@@ -40,8 +41,8 @@ const BENEFITS: [string, string, React.ReactNode][] = [
 ];
 
 const DETAILS: [string, string, React.ReactNode][] = [
-  ["DATE", "Sunday, 14 June 2026", IC.cal],
-  ["REGISTRATION CLOSES", "14 June 2026 · 17:00 WIB", IC.clock],
+  ["DATE", "Monday, 14 June 2027", IC.cal],
+  ["REGISTRATION CLOSES", "14 June 2027 · 17:00 WIB", IC.clock],
   ["PLATFORM", "Zoom Meeting (link dikirim via email)", IC.video],
   ["OPEN FOR", "Mahasiswa & umum *", IC.users],
 ];
@@ -55,10 +56,9 @@ function H2({ children }: { children: React.ReactNode }) {
   return <h2 className="mt-3.5 font-inter text-4xl font-black leading-[1.05] tracking-[-0.02em] lg:text-[56px]">{children}</h2>;
 }
 function RegisterButton({ className = "" }: { className?: string }) {
-  // Form registrasi belum dibuat (fase berikutnya) → sementara mengarah ke detail event.
   return (
     <a
-      href="#details"
+      href="#register"
       className={`inline-flex items-center justify-center gap-2.5 rounded-xl bg-brand px-7 py-4 font-outfit text-lg text-black shadow-[0_8px_32px_rgba(41,217,112,.4)] transition hover:-translate-y-0.5 md:text-xl ${className}`}
     >
       Register Now {icon(IC.arrow, "h-5 w-5")}
@@ -98,7 +98,7 @@ export default function EnergizeTalkPage() {
               <ul className="flex flex-wrap gap-2.5 md:gap-3">
                 {(
                   [
-                    [IC.cal, "14 June 2026"],
+                    [IC.cal, "14 June 2027"],
                     [IC.video, "Via Zoom"],
                     [IC.award, "E-Certificate"],
                   ] as const
@@ -117,7 +117,7 @@ export default function EnergizeTalkPage() {
                   Meet the Speakers
                 </a>
               </div>
-              <Countdown target={REG_CLOSES} closedLabel="Registration closed on 14 June 2026 at 17:00 WIB." />
+              <Countdown target={REG_CLOSES} closedLabel="Registration closed on 14 June 2027 at 17:00 WIB." />
             </div>
           </div>
         </section>
@@ -135,7 +135,7 @@ export default function EnergizeTalkPage() {
             </div>
             <div className="flex flex-col gap-7 md:pt-11">
               <p className="text-[17px] leading-[1.65] text-[#d1d1d1] md:text-[19px]">
-                Welcome to Energize 2026! A collaborative event presented by Anargya ITS EV Team to bring together innovators,
+                Welcome to Energize 2027! A collaborative event presented by Anargya ITS EV Team to bring together innovators,
                 students, and future leaders who are passionate about technology, sustainability, and electric vehicle
                 development. Through this event, participants will gain valuable insights, expand their network, and experience
                 the spirit of innovation that drives the future of mobility. Energize is more than just an event — it is a
@@ -240,6 +240,17 @@ export default function EnergizeTalkPage() {
                   </li>
                 ))}
               </ul>
+            </div>
+          </div>
+        </section>
+
+        {/* ================= REGISTER ================= */}
+        <section id="register" className="scroll-mt-28 px-5 py-[72px] md:px-12 md:py-[120px] lg:px-[120px]">
+          <div className="mx-auto max-w-[1040px]">
+            <h2 className="font-inter text-4xl font-black tracking-[-0.02em] md:text-[42px] lg:text-[56px]">Register Now</h2>
+            <p className="mt-3 text-[17px] text-[#9e9e9e] md:text-[19px]">Free and open for everyone — students and public.</p>
+            <div className="mt-8 md:mt-12">
+              <EnergizeRegisterForm deadline={REG_CLOSES} />
             </div>
           </div>
         </section>

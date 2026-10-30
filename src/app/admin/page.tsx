@@ -26,6 +26,165 @@ function Section({ id, title, hint, children }: { id: string; title: string; hin
   );
 }
 
+type Registrant = { id: number; full_name: string; email: string; phone: string; institution: string; created_at: string };
+const PAGE_SIZE = 10;
+
+/** Daftar pendaftar Energize Talk: pencarian + pagination di server (10 per halaman). */
+function EnergizeRegistrants() {
+  const [rows, setRows] = useState<Registrant[]>([]);
+  const [total, setTotal] = useState(0);
+  const [page, setPage] = useState(1);
+  const [q, setQ] = useState("");
+  const [query, setQuery] = useState(""); // q yang sudah di-debounce
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const t = setTimeout(() => {
+      setQuery(q.trim());
+      setPage(1);
+    }, 300);
+    return () => clearTimeout(t);
+  }, [q]);
+
+  useEffect(() => {
+    let alive = true;
+    (async () => {
+      setLoading(true);
+      let req = supabase()
+        .from("energize_registrations")
+        .select("*", { count: "exact" })
+        .order("created_at", { ascending: false })
+        .range((page - 1) * PAGE_SIZE, page * PAGE_SIZE - 1);
+      // karakter , ( ) dipakai sintaks filter PostgREST → dibuang dari kata kunci
+      const k = query.replace(/[,()]/g, " ");
+      if (k) req = req.or(`full_name.ilike.%${k}%,email.ilike.%${k}%,institution.ilike.%${k}%`);
+      const { data, count, error } = await req;
+      if (!alive) return;
+      if (error) setError(friendlyError(error));
+      else {
+        setError(null);
+        setRows((data ?? []) as Registrant[]);
+        setTotal(count ?? 0);
+      }
+      setLoading(false);
+    })();
+    return () => {
+      alive = false;
+    };
+  }, [page, query]);
+
+  const pages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  const from = total === 0 ? 0 : (page - 1) * PAGE_SIZE + 1;
+  const to = Math.min(page * PAGE_SIZE, total);
+
+  return (
+    <Section id="energize" title="Pendaftar Energize Talk">
+      <input
+        value={q}
+        onChange={(e) => setQ(e.target.value)}
+        placeholder="Cari nama / email / instansi…"
+        className="mb-5 w-full rounded-lg border border-white/30 bg-panel px-3 py-2 text-sm outline-none focus:border-brand md:w-80"
+      />
+      {error ? (
+        <ErrorBox message={error} />
+      ) : loading && rows.length === 0 ? (
+        <Spinner label="Memuat pendaftar…" />
+      ) : rows.length === 0 ? (
+        <p className="py-8 text-center text-muted">{query ? "Tidak ada pendaftar yang cocok." : "Belum ada pendaftar."}</p>
+      ) : (
+        <div className={loading ? "opacity-60 transition-opacity" : "transition-opacity"}>
+          <table className="hidden w-full text-left md:table">
+            <thead className="text-sm text-white/80 lg:text-base">
+              <tr>
+                <th className="py-3 font-medium">No.</th>
+                <th className="font-medium">Nama</th>
+                <th className="font-medium">Email</th>
+                <th className="font-medium">No. WhatsApp</th>
+                <th className="font-medium">Instansi</th>
+                <th className="font-medium">Waktu Daftar</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((r, i) => (
+                <tr key={r.id} className="border-t border-white/10 text-sm lg:text-base">
+                  <td className="py-3.5">{from + i}.</td>
+                  <td>{r.full_name}</td>
+                  <td className="max-w-[200px] truncate">{r.email}</td>
+                  <td>
+                    <a className="hover:text-brand" href={`https://wa.me/${r.phone.replace(/^0/, "62").replace(/^\+/, "")}`} target="_blank" rel="noreferrer">
+                      {r.phone}
+                    </a>
+                  </td>
+                  <td>{r.institution}</td>
+                  <td>{formatDate(r.created_at)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <ul className="space-y-3 md:hidden">
+            {rows.map((r) => (
+              <li key={r.id} className="rounded-xl border border-white/20 bg-panel p-4">
+                <div className="flex justify-between gap-3">
+                  <span>{r.full_name}</span>
+                  <span className="shrink-0 text-sm text-muted">{formatDate(r.created_at)}</span>
+                </div>
+                <p className="mt-1 truncate text-sm text-brand">{r.email}</p>
+                <p className="text-sm text-muted">
+                  {r.phone} · {r.institution}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {total > 0 && (
+        <nav aria-label="Pagination pendaftar" className="mt-6 flex flex-col items-center gap-3 md:flex-row md:justify-between">
+          <p className="text-sm text-white/60">
+            Menampilkan {from}–{to} dari {total} pendaftar
+          </p>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setPage((p) => p - 1)}
+              disabled={page === 1}
+              aria-label="Halaman sebelumnya"
+              className="rounded-lg border border-white/25 px-3 py-1.5 disabled:opacity-35"
+            >
+              ‹
+            </button>
+            {Array.from({ length: pages }, (_, i) => i + 1)
+              .filter((p) => p === 1 || p === pages || Math.abs(p - page) <= 1)
+              .map((p, i, arr) => (
+                <span key={p} className="flex items-center gap-2">
+                  {i > 0 && p - arr[i - 1] > 1 && <span className="text-white/40">…</span>}
+                  <button
+                    type="button"
+                    onClick={() => setPage(p)}
+                    aria-current={p === page ? "page" : undefined}
+                    className={`min-w-9 rounded-lg px-3 py-1.5 ${p === page ? "bg-brand text-black" : "border border-white/25 hover:border-brand"}`}
+                  >
+                    {p}
+                  </button>
+                </span>
+              ))}
+            <button
+              type="button"
+              onClick={() => setPage((p) => p + 1)}
+              disabled={page === pages}
+              aria-label="Halaman berikutnya"
+              className="rounded-lg border border-white/25 px-3 py-1.5 disabled:opacity-35"
+            >
+              ›
+            </button>
+          </div>
+        </nav>
+      )}
+    </Section>
+  );
+}
+
 function Dashboard() {
   const router = useRouter();
   const [products, setProducts] = useState<Product[]>([]);
@@ -271,6 +430,8 @@ function Dashboard() {
           </>
         )}
       </Section>
+
+      <EnergizeRegistrants />
 
       {modal && (
         <ProductModal

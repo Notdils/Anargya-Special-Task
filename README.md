@@ -53,12 +53,14 @@ Special Task Web Design & Development — Anargya 9th Gen (target: **LOW + MED**
 | `/admin/orders/[id]` | Detail order: data pembeli, tombol WhatsApp, rincian item, **ubah status** (Pending → Diproses → Selesai / Dibatalkan) |
 | Keamanan | Row Level Security: publik hanya bisa *membaca produk* dan *membuat order lewat RPC*. Data order hanya bisa dibaca/diubah oleh user yang terdaftar di tabel `admin_users` |
 
-### Event: Energize Talk 2026 (proof of concept)
+### Event: Energize Talk 2027 (proof of concept)
 | Bagian | Isi |
 |---|---|
-| `/energize-talk` | Halaman event: hero, About, **Meet the Experts**, Benefits, Save the Date, CTA. Form registrasi menyusul di fase berikutnya (tombol *Register Now* sementara mengarah ke detail event) |
+| `/energize-talk` | Halaman event: hero, About, **Meet the Experts**, Benefits, Save the Date, **form registrasi** (`#register`), CTA. Tombol *Register Now* langsung scroll ke form |
+| Form registrasi | Nama, Email, No. WhatsApp, Instansi (isi "Umum" bila bukan dari instansi). Validasi di browser **dan** di database (fungsi `register_energize`). Satu email hanya bisa mendaftar sekali, pendaftaran ditolak otomatis setelah deadline. Setelah berhasil tampil tombol *Join the LINE Group* (placeholder, ubah `LINE_GROUP_URL` di `src/components/EnergizeRegisterForm.tsx`) dan ID pendaftaran |
+| Admin: Pendaftar | Section **Pendaftar Energize Talk** di `/admin#energize`: pencarian nama/email/instansi, 10 pendaftar per halaman (pagination diproses di database), link WhatsApp |
 | Carousel keping cermin | Foto 3 pembicara berbentuk keping cermin (SVG `clipPath`). Posisi bertukar tiap 4 detik: cermin di belakang maju ke depan, cermin depan mundur. Pause saat hover, tombol ‹ ›, swipe. Disembunyikan di mobile agar info registrasi langsung terlihat |
-| Countdown | Hitung mundur ke batas pendaftaran (konstanta `REG_CLOSES` di `src/app/energize-talk/page.tsx`). Setelah lewat, tampil "Registration Closed" |
+| Countdown & deadline | Hitung mundur ke batas pendaftaran **14 June 2027, 17:00 WIB**. Setelah lewat, tampil "Registration Closed" dan form terkunci. Jika mengubah deadline, ubah di **dua tempat**: `REG_CLOSES` di `src/app/energize-talk/page.tsx` dan `v_deadline` di fungsi `register_energize` (`supabase/schema.sql`) |
 | Akses | Slide pertama hero Home, dropdown **Programs** di navbar, link di footer semua halaman, dan pop-up pengumuman di Home khusus mobile (tidak muncul lagi setelah ditutup, disimpan di `localStorage`) |
 | Foto pembicara | Simpan sebagai `public/images/energize/kemas.webp`, `arkastra.webp`, `hosta.webp` (data di `src/lib/energize.ts`). Selama file belum ada, keping tampil sebagai kaca hijau |
 
@@ -147,6 +149,7 @@ Bagian ini **hanya diperlukan jika ingin memakai project Supabase baru** (bukan 
    - fungsi checkout `place_order()`
    - bucket storage `products` (public) + policies
    - 5 produk awal (seed)
+   - tabel `energize_registrations` + fungsi `register_energize()` (registrasi Energize Talk)
    - mendaftarkan `admin@anargya.com` sebagai admin
 4. (Disarankan) *Authentication → Sign In / Providers →* matikan **Allow new users to sign up**.
 5. Buat `.env.local` berisi URL dan publishable key project baru, lalu restart `npm run dev`.
@@ -207,6 +210,7 @@ admin_users ── auth.users
 | `orders` | `id`, `customer_name`, `phone`, `email`, `method` (`pickup`/`delivery`), `address`, `note`, `total`, `status` (`pending`/`processing`/`completed`/`cancelled`), `created_at` |
 | `order_items` | `order_id`, `product_id`, `product_name`, `size` (S/M/L/XL/null), `qty`, `unit_price` |
 | `admin_users` | `user_id` (FK ke `auth.users`) |
+| `energize_registrations` | `id`, `full_name`, `email` (unik, tidak peka huruf besar/kecil), `phone`, `institution`, `created_at` |
 
 **Aturan bisnis**
 - Stok dihitung per produk (semua ukuran digabung) dan **berkurang otomatis** saat order dibuat. Jika stok tidak cukup, checkout ditolak.

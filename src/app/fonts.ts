@@ -1,4 +1,6 @@
 // Font di-host sendiri via @fontsource (tidak butuh koneksi ke Google Fonts saat build)
+import "@fontsource/inter/400.css";
+import "@fontsource/inter/700.css";
 import "@fontsource/inter/800.css";
 import "@fontsource/inter/900.css";
 import "@fontsource/inter/900-italic.css";

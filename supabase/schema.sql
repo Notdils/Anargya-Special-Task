@@ -178,3 +178,55 @@ where not exists (select 1 from public.products);
 insert into public.admin_users (user_id)
 select id from auth.users where email = 'admin@anargya.com'
 on conflict do nothing;
+
+-- =====================================================================
+--  ENERGIZE TALK 2027 — Registrasi peserta
+-- =====================================================================
+create table if not exists public.energize_registrations (
+  id           bigint generated always as identity primary key,
+  full_name    text not null,
+  email        text not null,
+  phone        text not null,
+  institution  text not null,
+  created_at   timestamptz not null default now()
+);
+
+-- Satu email hanya boleh mendaftar sekali (tidak peka huruf besar/kecil)
+create unique index if not exists energize_registrations_email_key
+  on public.energize_registrations (lower(email));
+
+alter table public.energize_registrations enable row level security;
+
+-- Hanya admin yang boleh membaca/mengubah data pendaftar
+drop policy if exists "energize: admin all" on public.energize_registrations;
+create policy "energize: admin all" on public.energize_registrations for all
+  using (public.is_admin()) with check (public.is_admin());
+
+-- Pendaftaran publik lewat fungsi ini saja: validasi, cek deadline, tolak email dobel.
+create or replace function public.register_energize(
+  p_name text, p_email text, p_phone text, p_institution text
+)
+returns jsonb
+language plpgsql security definer set search_path = public as $$
+declare
+  v_deadline constant timestamptz := '2027-06-14 17:00:00+07';
+  v_id bigint;
+  v_email text := lower(trim(p_email));
+begin
+  if now() > v_deadline then raise exception 'REGISTRATION_CLOSED'; end if;
+  if length(trim(coalesce(p_name,''))) < 3 then raise exception 'Nama minimal 3 karakter'; end if;
+  if v_email !~ '^[^\s@]+@[^\s@]+\.[^\s@]+$' then raise exception 'Format email tidak valid'; end if;
+  if coalesce(trim(p_phone),'') !~ '^(\+62|62|0)8[0-9]{7,12}$' then raise exception 'Format No. WhatsApp tidak valid'; end if;
+  if length(trim(coalesce(p_institution,''))) < 2 then raise exception 'Instansi wajib diisi'; end if;
+
+  insert into public.energize_registrations (full_name, email, phone, institution)
+  values (trim(p_name), v_email, trim(p_phone), trim(p_institution))
+  returning id into v_id;
+
+  return jsonb_build_object('id', v_id, 'name', trim(p_name));
+exception
+  when unique_violation then raise exception 'EMAIL_ALREADY_REGISTERED';
+end;
+$$;
+
+grant execute on function public.register_energize(text, text, text, text) to anon, authenticated;

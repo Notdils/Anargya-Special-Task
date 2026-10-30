@@ -39,7 +39,7 @@ export default function Home() {
       <main className="overflow-x-hidden">
         {/* ---------------- HERO (carousel: 1 Energize Talk, 2 Anargya) ---------------- */}
         <HeroCarousel
-          labels={["Energize Talk 2026", "Anargya ITS Formula EV Team"]}
+          labels={["Energize Talk 2027", "Anargya ITS Formula EV Team"]}
           slides={[
             <div key="energize" className="relative flex h-full items-center">
               <Texture />
@@ -54,14 +54,14 @@ export default function Home() {
                     NEW EVENT · REGISTRATION OPEN
                   </p>
                   <h2 className="font-inter font-extrabold leading-none tracking-[-0.03em]">
-                    <span className="block text-[40px] md:text-[44px] lg:text-[72px]">ENERGIZE TALK 2026</span>
+                    <span className="block text-[40px] md:text-[44px] lg:text-[72px]">ENERGIZE TALK 2027</span>
                     <span className="block font-black italic text-brand text-[48px] md:text-[52px] lg:text-[84px]">Watt&apos;s Up!</span>
                   </h2>
                   <p className="font-radio text-[19px] leading-tight tracking-[-0.02em] md:text-xl lg:text-[28px]">
                     Sustain the Future: Youth as Agents of Change
                   </p>
                   <p className="font-robomono text-sm font-medium md:text-[15px] lg:text-lg">
-                    14 June 2026 <span className="text-brand">/</span> Zoom <span className="text-brand">/</span> E-Certificate
+                    14 June 2027 <span className="text-brand">/</span> Zoom <span className="text-brand">/</span> E-Certificate
                   </p>
                   <Link
                     href="/energize-talk"

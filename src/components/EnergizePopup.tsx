@@ -44,9 +44,9 @@ export default function EnergizePopup() {
       </button>
       <p className="font-robomono text-xs font-medium tracking-[0.12em] text-brand">NEW EVENT</p>
       <p className="mt-2 pr-6 font-inter text-2xl font-black tracking-[-0.02em]">
-        Energize Talk 2026 — <span className="italic text-brand">Watt&apos;s Up!</span>
+        Energize Talk 2027 — <span className="italic text-brand">Watt&apos;s Up!</span>
       </p>
-      <p className="mt-2 text-sm text-white/70">Sustain the Future: Youth as Agents of Change · 14 June 2026 via Zoom.</p>
+      <p className="mt-2 text-sm text-white/70">Sustain the Future: Youth as Agents of Change · 14 June 2027 via Zoom.</p>
       <Link
         href="/energize-talk"
         onClick={close}

@@ -34,7 +34,7 @@ export default function Footer() {
             href="/energize-talk"
             className="mt-3 inline-block font-gowun text-base tracking-[-0.03em] text-brand hover:underline md:text-[20px] lg:text-[26px]"
           >
-            Energize Talk 2026 →
+            Energize Talk 2027 →
           </Link>
         </div>
       </div>
